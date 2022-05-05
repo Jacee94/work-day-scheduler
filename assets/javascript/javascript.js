@@ -1,12 +1,18 @@
 // Create page elements
-
 for(var i = 0; i < 24; i++){
     var row = $("<div>")
-        .addClass("row col time-block");
+        .addClass("row time-block")
+        .attr("id", i);
+
+    var currentDate = luxon.DateTime.now().toLocaleString(luxon.DateTime.DATE_FULL);
+    var dateTitle = $(".current-date")
+                    .text(currentDate);
+
+    var currentHour = luxon.DateTime.fromObject({hour: i}).toLocaleString(luxon.DateTime.TIME_SIMPLE);
 
     var hour = $("<div>")
-        .text(i)
-        .addClass("hour col-1");
+        .addClass("hour col-1")
+        .text(currentHour);
 
     var input = $("<textarea>")
         .addClass("description col-10 past")
@@ -22,7 +28,16 @@ for(var i = 0; i < 24; i++){
 
 function setCurrentHour(){
     var currentHour = luxon.DateTime.now().hour;
-    console.log(currentHour)
+    
+    var currTextAreaEl = $("#" + currentHour).children("textarea");
+    currTextAreaEl.removeClass("past")
+                    .addClass("present");
+
+    for(var i = currentHour + 1; i < 24; i++){
+        var row = $("#" + i);
+        row.children("textarea").removeClass("past")
+                                .addClass("future");
+    }
 }
 
 setCurrentHour();
