@@ -1,7 +1,17 @@
+// Create save data variable
 var currSaveData = [];
 for(var i = 0; i < 24; i++){
     currSaveData.push("");
 }
+
+// Get data from local storage
+var storageData = JSON.parse(localStorage.getItem("hourlyTasks"));
+
+// If storage data exists, write it to currSaveData for use on page
+if(storageData){
+    currSaveData = storageData;
+}
+
 console.log(currSaveData);
 
 // Create page elements
@@ -23,7 +33,8 @@ for(var i = 0; i < 24; i++){
     var input = $("<textarea>")
         .addClass("description col-10 past")
         .attr("id", "input")
-        .attr("data-id", i);
+        .attr("data-id", i)
+        .val(currSaveData[i]);
 
     var saveButton = $("<button>")
         .addClass("btn saveBtn col-1")
@@ -48,19 +59,27 @@ function setCurrentHour(){
     }
 }
 
-function saveInput(){
-    var saveId = $(this).attr("data-id");
-
+function saveInput(saveId){
     var saveString = $("textarea[data-id='" + saveId + "']").val();
-    console.log(saveString);
 
-    if(saveString){
-        currSaveData[saveId] = saveString;
-        localStorage.setItem("hourlyTasks", JSON.stringify(currSaveData));
-    }
+    currSaveData[saveId] = saveString;
+    localStorage.setItem("hourlyTasks", JSON.stringify(currSaveData));
 }
 
+$("textarea").on("blur", function(event){
+    var textAreaId = $(this).attr("data-id");
 
-$(".saveBtn").on("click", saveInput);
+    console.log(event.relatedTarget);
+
+    if(event.relatedTarget){
+        if(event.relatedTarget.dataset.id === $("button[data-id='" + textAreaId + "']").attr("data-id")){
+            saveInput(textAreaId);
+        } else {
+            $(this).val(currSaveData[textAreaId]);
+        }   
+    } else {
+        $(this).val(currSaveData[textAreaId]);
+    }
+});
 
 setCurrentHour();
