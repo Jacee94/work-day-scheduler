@@ -6,6 +6,7 @@ var endTime = 18;
 
 var confirmTime = window.confirm("Would you like to view standard business hours? (Added this functionality in case you, the grader, were grading this outside standard business hours, and need to check if my hour function was working ;)");
 
+// Display full 24 hours if user doesn't want to view standard business hours
 if(!confirmTime){
     startTime = 0;
     endTime = 24;
@@ -24,8 +25,6 @@ var storageData = JSON.parse(localStorage.getItem("hourlyTasks"));
 if(storageData){
     currSaveData = storageData;
 }
-
-console.log(currSaveData);
 
 // Create page elements
 for(var i = startTime; i < endTime; i++){
@@ -58,6 +57,7 @@ for(var i = startTime; i < endTime; i++){
     $(".container").append(row);
 }
 
+// Changes the colors of the textareas depending on if theyre in the present or future
 function setCurrentHour(){
     var currentHour = luxon.DateTime.now().hour;
     
@@ -72,6 +72,7 @@ function setCurrentHour(){
     }
 }
 
+// When the save button is clicked, it saves the related textbox value
 function saveInput(saveId){
     var saveString = $("textarea[data-id='" + saveId + "']").val();
 
@@ -79,6 +80,7 @@ function saveInput(saveId){
     localStorage.setItem("hourlyTasks", JSON.stringify(currSaveData));
 }
 
+// When textarea loses focus, save the data if save button was clicked. Otherwise revert the changes made
 $("textarea").on("blur", function(event){
     var textAreaId = $(this).attr("data-id");
 
