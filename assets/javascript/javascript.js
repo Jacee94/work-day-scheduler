@@ -1,3 +1,9 @@
+var currSaveData = [];
+for(var i = 0; i < 24; i++){
+    currSaveData.push("");
+}
+console.log(currSaveData);
+
 // Create page elements
 for(var i = 0; i < 24; i++){
     var row = $("<div>")
@@ -16,11 +22,13 @@ for(var i = 0; i < 24; i++){
 
     var input = $("<textarea>")
         .addClass("description col-10 past")
-        .attr("id", "input");
+        .attr("id", "input")
+        .attr("data-id", i);
 
     var saveButton = $("<button>")
         .addClass("btn saveBtn col-1")
-        .text("save");
+        .text("save")
+        .attr("data-id", i);
 
     row.append(hour, input, saveButton);
     $(".container").append(row);
@@ -39,5 +47,20 @@ function setCurrentHour(){
                                 .addClass("future");
     }
 }
+
+function saveInput(){
+    var saveId = $(this).attr("data-id");
+
+    var saveString = $("textarea[data-id='" + saveId + "']").val();
+    console.log(saveString);
+
+    if(saveString){
+        currSaveData[saveId] = saveString;
+        localStorage.setItem("hourlyTasks", JSON.stringify(currSaveData));
+    }
+}
+
+
+$(".saveBtn").on("click", saveInput);
 
 setCurrentHour();
