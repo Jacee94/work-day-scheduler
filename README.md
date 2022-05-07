@@ -6,5 +6,5 @@ GitHub Repo: https://github.com/Jacee94/work-day-scheduler
 Deployed URL: https://jacee94.github.io/work-day-scheduler/  
 Luxon API: https://moment.github.io/luxon/#/  
 ## Screenshots
-![screenshot1](./assets/images/readme-snapshot-1.JPG)  
+![screenshot1](./assets/images/screenshot.JPG)  
 ![screenshot2](./assets/images/readme-snapshot-2.JPG)
