@@ -28,32 +28,17 @@ if(storageData){
 
 // Create page elements
 for(var i = startTime; i < endTime; i++){
-    var row = $("<div>")
-        .addClass("row time-block")
-        .attr("id", i);
+    const currentDate = luxon.DateTime.now().toLocaleString(luxon.DateTime.DATE_FULL);
+    const dateTitle = $(".current-date")
+                        .text(currentDate);
+    const currentHour = luxon.DateTime.fromObject({hour: i}).toLocaleString(luxon.DateTime.TIME_SIMPLE);
 
-    var currentDate = luxon.DateTime.now().toLocaleString(luxon.DateTime.DATE_FULL);
-    var dateTitle = $(".current-date")
-                    .text(currentDate);
+    const row = `<div class='row time-block' id='${i}'>
+                    <div class='hour col-1'>${currentHour}</div>
+                    <textarea class='description col-10 past' id='input' data-id='${i}'>${currSaveData[i]}</textarea>
+                    <button class='btn saveBtn col-1' data-id='${i}'>Save</button>        
+                </div>`;
 
-    var currentHour = luxon.DateTime.fromObject({hour: i}).toLocaleString(luxon.DateTime.TIME_SIMPLE);
-
-    var hour = $("<div>")
-        .addClass("hour col-1")
-        .text(currentHour);
-
-    var input = $("<textarea>")
-        .addClass("description col-10 past")
-        .attr("id", "input")
-        .attr("data-id", i)
-        .val(currSaveData[i]);
-
-    var saveButton = $("<button>")
-        .addClass("btn saveBtn col-1")
-        .text("save")
-        .attr("data-id", i);
-
-    row.append(hour, input, saveButton);
     $(".container").append(row);
 }
 
@@ -61,7 +46,7 @@ for(var i = startTime; i < endTime; i++){
 function setCurrentHour(){
     var currentHour = luxon.DateTime.now().hour;
     
-    var currTextAreaEl = $("#" + currentHour).children("textarea");
+    var currTextAreaEl = $(`#${currentHour}`).children("textarea");
     currTextAreaEl.removeClass("past")
                     .addClass("present");
 
@@ -74,7 +59,7 @@ function setCurrentHour(){
 
 // When the save button is clicked, it saves the related textbox value
 function saveInput(saveId){
-    var saveString = $("textarea[data-id='" + saveId + "']").val();
+    var saveString = $(`textarea[data-id='${saveId}']`).val();
 
     currSaveData[saveId] = saveString;
     localStorage.setItem("hourlyTasks", JSON.stringify(currSaveData));
